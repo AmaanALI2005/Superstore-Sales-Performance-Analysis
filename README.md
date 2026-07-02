@@ -2,6 +2,7 @@
 
 
 -- 1. Year-over-Year (YoY) Sales & Profit Growth
+
 select	 year , round(sum(s.sales),2) as total_sales,
 round(sum(s.profit),2) as total_profit
 from sales s
@@ -12,6 +13,7 @@ order by c.year;
 
 
 -- 2. Seasonality (The Weekend Effect)
+
 select c.Day_Name,
 round(sum(s.sales),2) as total_sales,
 sum(case when s.returned = 'yes' then 1 else 0 end ) as total_returns
@@ -23,6 +25,7 @@ order by total_sales desc;
 
 
 -- 3. The Best Quarter
+
 select c.Year,
 	   c.`Quarter(Q)`,
        round(sum(s.sales),2) as total_sales
@@ -36,6 +39,7 @@ group by c.Year,
 
        
 -- 4. The Discount Trap
+
  select category, `sub-category`,
                 round(sum(sales),2) as total_sales,
                 round(avg(Discount)*100,2) as avg_discount_pct,
@@ -46,6 +50,7 @@ order by total_profit asc;
 
 
 -- 5. The Return Problem
+
   select region, count(*) as total_orders,
            sum(case when Returned = 'Yes' then 1 else 0 end) as returned_orders,
 		   round((sum(case when Returned = 'yes' then 1 else  0 end) / count(*)) * 100,2)
@@ -56,6 +61,7 @@ order by total_profit asc;
 
 
 -- 6. Top 10 Loss-Making Customers		
+
 select Customer_ID, Customer_Name,
      round(sum(sales),2) as total_sales,  
      round(sum(Profit),2) as total_loss
@@ -66,8 +72,9 @@ select Customer_ID, Customer_Name,
      limit 10;
 
      
--- 7. Shipping Delay Analysis     
-     select 
+-- 7. Shipping Delay Analysis   
+
+  select 
          Ship_Mode, 
          round(avg(datediff(ShipDate,OrderDate)),2) as avg_shipping_days
          from sales 
@@ -75,7 +82,8 @@ select Customer_ID, Customer_Name,
          order by avg_shipping_days; 
 
          
--- 8. Late Delivery Impact         
+-- 8. Late Delivery Impact
+
 with shipingdata as (
 select order_id, returned,
 datediff(ShipDate, OrderDate)  as delivery_days
@@ -93,7 +101,8 @@ select
 
      
 -- 9. Salesperson Performance
-     select 
+
+ select 
 		Retail_Sales_People,
         round(sum(sales),2) as total_sales, 
         round(sum(profit),2) as total_profit,
